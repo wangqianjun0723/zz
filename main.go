@@ -2,11 +2,12 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"log"
 	"os"
 
-	ao "github.com/adam-hanna/arrayOperations"
+	"github.com/adam-hanna/arrayOperations"
 )
 
 // readLines reads a whole file into memory
@@ -41,28 +42,38 @@ func writeLines(lines []string, path string) error {
 	return w.Flush()
 }
 
+func readFiles(fileNames []string) ([][]string, error) {
+	var files [][]string
+	for _, fileName := range fileNames {
+		fileLines, err := readLines(fileName)
+		if err != nil {
+			return nil, err
+		}
+		files = append(files, fileLines)
+	}
+	return files, nil
+}
+
 func main() {
-	lines, err := readLines("a.txt")
+	intersectPtr := flag.Bool("i", false, "Intersect two files")
+	flag.Parse()
+	args := flag.Args()
+
+	files, err := readFiles(args)
 	if err != nil {
 		log.Fatalf("readLines: %s", err)
 	}
 
-	lines2, err := readLines("b.txt")
-	if err != nil {
-		log.Fatalf("readLines: %s", err)
+	if *intersectPtr {
+		slice := arrayOperations.IntersectString(files...)
+		for _, line := range slice {
+			fmt.Println(line)
+		}
+	} else {
+		slice := arrayOperations.DifferenceString(files...)
+		for _, line := range slice {
+			fmt.Println(line)
+		}
 	}
-
-	z, ok := ao.Difference(lines, lines2)
-	if !ok {
-		fmt.Println("Cannot find intersect")
-	}
-
-	slice, ok := z.Interface().([]string)
-	if !ok {
-		fmt.Println("Cannot convert to slice")
-	}
-
-	for _, line := range slice {
-		fmt.Println(line)
-	}
+	os.Exit(0)
 }
