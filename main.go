@@ -56,6 +56,7 @@ func readFiles(fileNames []string) ([][]string, error) {
 
 func main() {
 	intersectPtr := flag.Bool("i", false, "Intersect two files")
+	onlyPtr := flag.Bool("only", false, "Diff lines which only in the first file")
 	flag.Parse()
 	args := flag.Args()
 
@@ -71,6 +72,9 @@ func main() {
 		}
 	} else {
 		slice := arrayOperations.DifferenceString(files...)
+		if *onlyPtr {
+			slice = arrayOperations.IntersectString(slice, files[0])
+		}
 		for _, line := range slice {
 			fmt.Println(line)
 		}
