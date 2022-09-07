@@ -7,7 +7,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/adam-hanna/arrayOperations"
+	ao "github.com/adam-hanna/arrayOperations"
 )
 
 // readLines reads a whole file into memory
@@ -66,14 +66,14 @@ func main() {
 	}
 
 	if *intersectPtr {
-		slice := arrayOperations.IntersectString(files...)
+		slice := ao.Intersect(files...)
 		for _, line := range slice {
 			fmt.Println(line)
 		}
 	} else {
-		slice := arrayOperations.DifferenceString(files...)
+		slice := ao.Difference(files...)
 		if *onlyPtr {
-			slice = arrayOperations.IntersectString(slice, files[0])
+			slice = ao.Intersect(slice, files[0])
 		}
 		for _, line := range slice {
 			fmt.Println(line)

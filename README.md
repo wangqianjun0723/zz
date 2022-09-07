@@ -5,7 +5,7 @@ a little tool to get the intersection and difference between multiple files.
 ## Install
 
 ```shell
-go get github.com/kaleocheng/zz
+go install github.com/kaleocheng/zz
 ```
 
 ## Usage
